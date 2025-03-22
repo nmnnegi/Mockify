@@ -1,3 +1,5 @@
+// This file contains the InterviewPin component to display interview cards 
+// Updated for TypeScript compatibility with event handlers
 import { Interview } from "@/types";
 import { useNavigate } from "react-router-dom";
 import {
