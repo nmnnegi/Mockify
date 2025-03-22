@@ -95,11 +95,6 @@ export const InterviewPin = ({
     }
   };
 
-  // Open delete confirmation dialog
-  const openDeleteDialog = () => {
-    setShowDeleteConfirm(true);
-  };
-
   // Delete interview from Firebase
   const handleDelete = async () => {
     if (!interview?.id) return;
@@ -154,7 +149,8 @@ export const InterviewPin = ({
               <TooltipButton
                 content="View"
                 buttonVariant={"ghost"}
-                onClick={() => {
+                onClick={(e) => {
+                  e?.stopPropagation();
                   navigate(`/generate/${interview?.id}`, { replace: true });
                 }}
                 disbaled={isDeleting}
@@ -166,7 +162,8 @@ export const InterviewPin = ({
               <TooltipButton
                 content="Feedback"
                 buttonVariant={"ghost"}
-                onClick={() => {
+                onClick={(e) => {
+                  e?.stopPropagation();
                   navigate(`/generate/feedback/${interview?.id}`, {
                     replace: true,
                   });
@@ -180,7 +177,8 @@ export const InterviewPin = ({
               <TooltipButton
                 content="Start"
                 buttonVariant={"ghost"}
-                onClick={() => {
+                onClick={(e) => {
+                  e?.stopPropagation();
                   navigate(`/generate/interview/${interview?.id}`, {
                     replace: true,
                   });
@@ -194,7 +192,10 @@ export const InterviewPin = ({
               <TooltipButton
                 content="Delete"
                 buttonVariant={"ghost"}
-                onClick={openDeleteDialog}
+                onClick={(e) => {
+                  e?.stopPropagation();
+                  setShowDeleteConfirm(true);
+                }}
                 disbaled={isDeleting}
                 buttonClassName="hover:text-red-500"
                 icon={<Trash2 />}
