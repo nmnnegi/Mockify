@@ -1,106 +1,72 @@
-import React from "react";
-import { Container } from "@/components/container";
-
 const HowItWorksPage = () => {
   return (
-    <div className="py-12">
-      <Container>
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">How Mockify Works</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Our AI-powered platform makes interview preparation simple, effective, and tailored to your needs.
+    <div className="container mx-auto py-16">
+      <h1 className="text-4xl font-bold text-center mb-12">How Mockify Works</h1>
+      
+      <div className="space-y-16">
+        <section className="bg-white rounded-lg shadow-lg p-8">
+          <h2 className="text-2xl font-semibold mb-4">1. Create Your Interview</h2>
+          <p className="text-gray-700 mb-6">
+            Start by creating a personalized interview based on the position you're applying for.
+            Specify your target role, experience level, and the technical skills you want to practice.
           </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          <div className="bg-white p-8 rounded-lg shadow-md">
-            <div className="text-3xl font-bold text-blue-500 mb-4">01</div>
-            <h3 className="text-xl font-semibold mb-3">Create Your Interview</h3>
-            <p className="text-gray-600">
-              Select your target role, experience level, and tech stack. Our AI generates a customized interview session based on your requirements.
+          <div className="bg-gray-50 p-4 rounded-md">
+            <p className="text-sm text-gray-600">
+              Our AI system will create a realistic interview scenario tailored to your specifications,
+              matching the types of questions you might encounter in actual interviews.
             </p>
           </div>
-
-          <div className="bg-white p-8 rounded-lg shadow-md">
-            <div className="text-3xl font-bold text-blue-500 mb-4">02</div>
-            <h3 className="text-xl font-semibold mb-3">Practice With Realistic Questions</h3>
-            <p className="text-gray-600">
-              Face challenging technical questions that simulate real interviews. Our AI adapts to your performance, just like a real interviewer would.
+        </section>
+        
+        <section className="bg-white rounded-lg shadow-lg p-8">
+          <h2 className="text-2xl font-semibold mb-4">2. Practice with AI</h2>
+          <p className="text-gray-700 mb-6">
+            Engage in a realistic interview with our AI interviewer. The system adapts to your responses
+            and provides a natural conversation flow, just like a real interview.
+          </p>
+          <div className="bg-gray-50 p-4 rounded-md">
+            <p className="text-sm text-gray-600">
+              You can practice using voice or text responses. Our AI listens and responds intelligently,
+              asking follow-up questions when appropriate.
             </p>
           </div>
-
-          <div className="bg-white p-8 rounded-lg shadow-md">
-            <div className="text-3xl font-bold text-blue-500 mb-4">03</div>
-            <h3 className="text-xl font-semibold mb-3">Get Detailed Feedback</h3>
-            <p className="text-gray-600">
-              Receive comprehensive feedback on your answers, including strengths, areas for improvement, and suggested resources for further study.
+        </section>
+        
+        <section className="bg-white rounded-lg shadow-lg p-8">
+          <h2 className="text-2xl font-semibold mb-4">3. Receive Detailed Feedback</h2>
+          <p className="text-gray-700 mb-6">
+            After completing your mock interview, receive comprehensive feedback on your performance,
+            including strengths, areas for improvement, and specific suggestions.
+          </p>
+          <div className="bg-gray-50 p-4 rounded-md">
+            <p className="text-sm text-gray-600">
+              Our AI analyzes your responses for technical accuracy, communication clarity,
+              and overall interview performance, helping you identify where to focus your preparation.
             </p>
           </div>
-        </div>
-
-        <div className="bg-gray-50 p-8 rounded-lg mb-16">
-          <h2 className="text-2xl font-bold mb-6 text-center">Key Features</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="flex items-start">
-              <div className="bg-blue-500 text-white p-2 rounded-full mr-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-2">AI-Powered Interviews</h3>
-                <p className="text-gray-600">Advanced AI technology that understands technical concepts and can evaluate your answers.</p>
-              </div>
-            </div>
-            
-            <div className="flex items-start">
-              <div className="bg-blue-500 text-white p-2 rounded-full mr-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-2">Customized Experience</h3>
-                <p className="text-gray-600">Tailor interviews to your target role, experience level, and specific technologies.</p>
-              </div>
-            </div>
-            
-            <div className="flex items-start">
-              <div className="bg-blue-500 text-white p-2 rounded-full mr-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-2">Detailed Analytics</h3>
-                <p className="text-gray-600">Track your progress over time and identify areas where you need more practice.</p>
-              </div>
-            </div>
-            
-            <div className="flex items-start">
-              <div className="bg-blue-500 text-white p-2 rounded-full mr-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-2">Resource Recommendations</h3>
-                <p className="text-gray-600">Get tailored learning resources based on your performance.</p>
-              </div>
-            </div>
+        </section>
+        
+        <section className="bg-white rounded-lg shadow-lg p-8">
+          <h2 className="text-2xl font-semibold mb-4">4. Track Your Progress</h2>
+          <p className="text-gray-700 mb-6">
+            Monitor your improvement over time with our progress tracking system. See how you're
+            improving across different skills and interview types.
+          </p>
+          <div className="bg-gray-50 p-4 rounded-md">
+            <p className="text-sm text-gray-600">
+              Each practice session builds your confidence and skills. The system recommends
+              focus areas based on your performance history.
+            </p>
           </div>
-        </div>
-
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold mb-4">Ready to Ace Your Next Interview?</h2>
-          <a 
-            href="/generate" 
-            className="inline-block px-8 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors"
-          >
-            Create Your First Interview
-          </a>
-        </div>
-      </Container>
+        </section>
+      </div>
+      
+      <div className="mt-16 text-center">
+        <h3 className="text-2xl font-bold mb-4">Ready to ace your next interview?</h3>
+        <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-md transition">
+          Create Your First Interview
+        </button>
+      </div>
     </div>
   );
 };

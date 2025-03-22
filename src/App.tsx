@@ -19,7 +19,7 @@ import { useFirebaseAuth } from "./config/firebase-auth";
 
 const App = () => {
   // Connect Clerk to Firebase Auth
-  const { loading: authLoading, error: authError } = useFirebaseAuth();
+  const { error: authError } = useFirebaseAuth();
 
   // If there's a Firebase auth error, we can log it or handle it here
   if (authError) {
