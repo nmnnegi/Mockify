@@ -155,8 +155,7 @@ export const InterviewPin = ({
               <TooltipButton
                 content="View"
                 buttonVariant={"ghost"}
-                onClick={(e: React.MouseEvent) => {
-                  e.stopPropagation();
+                onClick={() => {
                   navigate(`/generate/${interview?.id}`, { replace: true });
                 }}
                 disbaled={isDeleting}
@@ -168,8 +167,7 @@ export const InterviewPin = ({
               <TooltipButton
                 content="Feedback"
                 buttonVariant={"ghost"}
-                onClick={(e: React.MouseEvent) => {
-                  e.stopPropagation();
+                onClick={() => {
                   navigate(`/generate/feedback/${interview?.id}`, {
                     replace: true,
                   });
@@ -183,8 +181,7 @@ export const InterviewPin = ({
               <TooltipButton
                 content="Start"
                 buttonVariant={"ghost"}
-                onClick={(e: React.MouseEvent) => {
-                  e.stopPropagation();
+                onClick={() => {
                   navigate(`/generate/interview/${interview?.id}`, {
                     replace: true,
                   });
