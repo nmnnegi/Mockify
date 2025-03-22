@@ -96,8 +96,7 @@ export const InterviewPin = ({
   };
 
   // Open delete confirmation dialog
-  const openDeleteDialog = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent card click events
+  const openDeleteDialog = () => {
     setShowDeleteConfirm(true);
   };
 
