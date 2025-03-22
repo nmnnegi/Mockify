@@ -72,30 +72,56 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
     : { title: "Created..!", description: "New Mock Interview created..." };
 
   const cleanAiResponse = (responseText: string) => {
-    // Step 1: Trim any surrounding whitespace
-    let cleanText = responseText.trim();
-
-    // Step 2: Remove any occurrences of "json" or code block symbols (``` or `)
-    cleanText = cleanText.replace(/(json|```|`)/g, "");
-
-    // Step 3: Extract a JSON array by capturing text between square brackets
-    const jsonArrayMatch = cleanText.match(/\[.*\]/s);
-    if (jsonArrayMatch) {
-      cleanText = jsonArrayMatch[0];
-    } else {
-      throw new Error("No JSON array found in response");
-    }
-
-    // Step 4: Parse the clean JSON text into an array of objects
     try {
-      return JSON.parse(cleanText);
+      // Step 1: Trim any surrounding whitespace
+      let cleanText = responseText.trim();
+
+      // Step 2: Remove any occurrences of "json" or code block symbols (``` or `)
+      cleanText = cleanText.replace(/(json|```|`)/g, "");
+
+      // Step 3: Extract a JSON array by capturing text between square brackets
+      const jsonArrayMatch = cleanText.match(/\[.*\]/s);
+      if (jsonArrayMatch) {
+        cleanText = jsonArrayMatch[0];
+      } else {
+        console.error("No JSON array found in response, trying to parse entire response");
+        // Try to parse the entire response as JSON
+        cleanText = cleanText;
+      }
+
+      // Step 4: Parse the clean JSON text into an array of objects
+      try {
+        const parsed = JSON.parse(cleanText);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        } else {
+          throw new Error("Parsed JSON is not an array or is empty");
+        }
+      } catch (error) {
+        console.error("Invalid JSON format:", error);
+        // Fallback: return a default set of questions if parsing fails
+        return [
+          { 
+            question: "What is your experience with the technologies mentioned in the job description?", 
+            answer: "This is a placeholder answer. The AI couldn't generate proper questions. Please try again."
+          }
+        ];
+      }
     } catch (error) {
-      throw new Error("Invalid JSON format: " + (error as Error)?.message);
+      console.error("Error processing AI response:", error);
+      // Return a fallback question
+      return [
+        { 
+          question: "Tell me about your experience with this technology stack.", 
+          answer: "This is a placeholder answer. The AI couldn't generate proper questions. Please try again."
+        }
+      ];
     }
   };
 
   const generateAiResponse = async (data: FormData) => {
-    const prompt = `
+    try {
+      const prompt = `
         As an experienced prompt engineer, generate a JSON array containing 5 technical interview questions along with detailed answers based on the following job information. Each object in the array should have the fields "question" and "answer", formatted as follows:
 
         [
@@ -112,49 +138,159 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
         The questions should assess skills in ${data?.techStack} development and best practices, problem-solving, and experience handling complex requirements. Please format the output strictly as an array of JSON objects without any additional labels, code blocks, or explanations. Return only the JSON array with questions and answers.
         `;
 
-    const aiResult = await chatSession.sendMessage(prompt);
-    const cleanedResponse = cleanAiResponse(aiResult.response.text());
-
-    return cleanedResponse;
+      // Add a timeout to prevent hanging if the API doesn't respond
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error("API request timed out")), 15000);
+      });
+      
+      const result = await Promise.race([
+        chatSession.sendMessage(prompt),
+        timeoutPromise
+      ]);
+      
+      return cleanAiResponse(result.response.text());
+    } catch (error) {
+      console.error("Error generating AI response:", error);
+      toast.error("AI Error", { 
+        description: "Could not generate interview questions. Using default questions instead." 
+      });
+      
+      // Return default questions if AI fails
+      return [
+        { 
+          question: `Tell me about your experience with ${data.techStack}?`, 
+          answer: "Describe your projects and expertise with these technologies."
+        },
+        { 
+          question: `How would you implement a project using ${data.techStack}?`, 
+          answer: "Explain your technical implementation approach."
+        },
+        { 
+          question: `What challenges have you faced with ${data.techStack}?`, 
+          answer: "Describe challenges and your problem-solving approach."
+        }
+      ];
+    }
   };
 
   const onSubmit = async (data: FormData) => {
     try {
       setLoading(true);
+      console.log("Form submitted with data:", data);
+      console.log("User ID:", userId);
+
+      if (!userId) {
+        console.error("No user ID available from Clerk authentication");
+        toast.error("Authentication Error", { 
+          description: "Please sign in again before creating an interview." 
+        });
+        setLoading(false);
+        return;
+      }
+
+      // Generate default questions to ensure we have content in case AI fails
+      const defaultQuestions = [
+        { 
+          question: `Tell me about your experience with ${data.techStack}?`, 
+          answer: "Describe your projects and expertise with these technologies."
+        },
+        { 
+          question: `How would you implement a project using ${data.techStack}?`, 
+          answer: "Explain your technical implementation approach."
+        },
+        { 
+          question: `What challenges have you faced with ${data.techStack}?`, 
+          answer: "Describe challenges and your problem-solving approach."
+        }
+      ];
 
       if (initialData) {
         // update
         if (isValid) {
-          const aiResult = await generateAiResponse(data);
+          try {
+            console.log("Generating AI response for update");
+            const aiResult = await generateAiResponse(data);
+            console.log("AI response generated successfully:", aiResult);
 
-          await updateDoc(doc(db, "interviews", initialData?.id), {
-            questions: aiResult,
-            ...data,
-            updatedAt: serverTimestamp(),
-          }).catch((error) => console.log(error));
-          toast(toastMessage.title, { description: toastMessage.description });
+            await updateDoc(doc(db, "interviews", initialData?.id), {
+              questions: aiResult,
+              ...data,
+              updatedAt: serverTimestamp(),
+            });
+            
+            console.log("Document updated successfully");
+            toast(toastMessage.title, { description: toastMessage.description });
+            navigate("/generate", { replace: true });
+          } catch (error) {
+            console.error("Error updating document:", error);
+            
+            try {
+              // Try fallback update with default questions
+              await updateDoc(doc(db, "interviews", initialData?.id), {
+                questions: defaultQuestions,
+                ...data,
+                updatedAt: serverTimestamp(),
+              });
+              
+              toast("Updated with defaults", { 
+                description: "Document was updated with default questions due to an error." 
+              });
+              navigate("/generate", { replace: true });
+            } catch (fbError) {
+              console.error("Firebase fallback error:", fbError);
+              toast.error("Database Error", { 
+                description: "Could not update document. Please check your connection and try again." 
+              });
+            }
+          }
         }
       } else {
         // create a new mock interview
         if (isValid) {
-          const aiResult = await generateAiResponse(data);
+          try {
+            console.log("Generating AI response for create");
+            const aiResult = await generateAiResponse(data);
+            console.log("AI response generated successfully:", aiResult);
 
-          await addDoc(collection(db, "interviews"), {
-            ...data,
-            userId,
-            questions: aiResult,
-            createdAt: serverTimestamp(),
-          });
-
-          toast(toastMessage.title, { description: toastMessage.description });
+            await addDoc(collection(db, "interviews"), {
+              ...data,
+              userId,
+              questions: aiResult,
+              createdAt: serverTimestamp(),
+            });
+            
+            console.log("Document created successfully");
+            toast(toastMessage.title, { description: toastMessage.description });
+            navigate("/generate", { replace: true });
+          } catch (error) {
+            console.error("Error adding document:", error);
+            
+            try {
+              // Try fallback create with default questions
+              await addDoc(collection(db, "interviews"), {
+                ...data,
+                userId,
+                questions: defaultQuestions,
+                createdAt: serverTimestamp(),
+              });
+              
+              toast("Created with defaults", { 
+                description: "Document was created with default questions due to an error." 
+              });
+              navigate("/generate", { replace: true });
+            } catch (fbError) {
+              console.error("Firebase fallback error:", fbError);
+              toast.error("Database Error", { 
+                description: "Could not create document. Please check your connection and try again." 
+              });
+            }
+          }
         }
       }
-
-      navigate("/generate", { replace: true });
     } catch (error) {
-      console.log(error);
-      toast.error("Error..", {
-        description: `Something went wrong. Please try again later`,
+      console.error("Form submission error:", error);
+      toast.error("Error occurred", {
+        description: `Something went wrong: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again later.`,
       });
     } finally {
       setLoading(false);

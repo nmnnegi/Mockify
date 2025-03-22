@@ -14,14 +14,25 @@ import { CreateEditPage } from "./routes/create-edit-page";
 import { MockLoadPage } from "./routes/mock-load-page";
 import { MockInterviewPage } from "./routes/mock-interview-page";
 import { Feedback } from "./routes/feedback";
+import HowItWorksPage from "./routes/how-it-works";
+import { useFirebaseAuth } from "./config/firebase-auth";
 
 const App = () => {
+  // Connect Clerk to Firebase Auth
+  const { loading: authLoading, error: authError } = useFirebaseAuth();
+
+  // If there's a Firebase auth error, we can log it or handle it here
+  if (authError) {
+    console.error("Firebase Auth Error:", authError);
+  }
+
   return (
     <Router>
       <Routes>
         {/* public routes */}
         <Route element={<PublicLayout />}>
           <Route index element={<HomePage />} />
+          <Route path="/how-it-works" element={<HowItWorksPage />} />
         </Route>
 
         {/* authentication layout */}

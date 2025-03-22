@@ -4,9 +4,9 @@ export const LogoContainer = () => {
   return (
     <Link to={"/"}>
       <img
-        src="/assets/svg/logo.svg"
-        alt=""
-        className="min-w-10 min-h-10 object-contain"
+        src="/assets/svg/logo.png"
+        alt="Mockify Logo"
+        className="h-14 w-auto max-w-[200px] object-contain"
       />
     </Link>
   );

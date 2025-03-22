@@ -30,13 +30,24 @@ export const ToggleContainer = () => {
               to={"/generate"}
               className={({ isActive }) =>
                 cn(
-                  "text-base text-neutral-600 ",
+                  "text-base text-neutral-600 hover:text-neutral-900 transition-colors",
                   isActive && "text-neutral-900 font-semibold"
                 )
               }
             >
-              Take An Interview
+              Create Interview
             </NavLink>
+          )}
+          
+          {!userId && (
+            <div className="flex flex-col items-start gap-4 mt-4">
+              <NavLink
+                to="/signin"
+                className="text-neutral-600 hover:text-neutral-900 transition-colors"
+              >
+                Sign In
+              </NavLink>
+            </div>
           )}
         </nav>
       </SheetContent>

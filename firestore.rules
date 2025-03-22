@@ -1,0 +1,9 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Temporarily allow all access until we fix the auth connection
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+} 

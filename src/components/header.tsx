@@ -15,9 +15,11 @@ const Header = () => {
       className={cn("w-full border-b duration-150 transition-all ease-in-out")}
     >
       <Container>
-        <div className="flex items-center gap-4 w-full">
+        <div className="flex items-center gap-6 w-full">
           {/* logo section */}
-          <LogoContainer />
+          <div className="flex-shrink-0">
+            <LogoContainer />
+          </div>
 
           {/* navigation section */}
           <nav className="hidden md:flex items-center gap-3">
@@ -27,17 +29,29 @@ const Header = () => {
                 to={"/generate"}
                 className={({ isActive }) =>
                   cn(
-                    "text-base text-neutral-600",
+                    "text-base text-neutral-600 hover:text-neutral-900 transition-colors",
                     isActive && "text-neutral-900 font-semibold"
                   )
                 }
               >
-                Take An Interview
+                Create Interview
               </NavLink>
             )}
           </nav>
 
           <div className="ml-auto flex items-center gap-6">
+            {/* action buttons */}
+            {!userId && (
+              <div className="hidden md:flex items-center gap-4">
+                <NavLink
+                  to="/signin"
+                  className="text-neutral-600 hover:text-neutral-900 transition-colors"
+                >
+                  Sign In
+                </NavLink>
+              </div>
+            )}
+
             {/* profile section */}
             <ProfileContainer />
 
