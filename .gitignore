@@ -37,16 +37,18 @@ coverage-ts
 
 # Environment variables
 .env
+.env.*
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
 # Firebase
-.firebase/
+.firebase/**
+.firebase
+firebase-debug.log
 *-debug.log
 .runtimeconfig.json
-firebase-debug.log
 firestore-debug.log
 ui-debug.log
 
