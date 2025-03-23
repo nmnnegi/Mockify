@@ -26,8 +26,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 
 interface InterviewPinProps {
   interview: Interview;
@@ -41,9 +39,7 @@ export const InterviewPin = ({
   const navigate = useNavigate();
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [isActive, setIsActive] = useState(false);
-  const [value, setValue] = useState("");
-
+  
   // Format date safely - handle both Firebase Timestamp and string date formats
   const formatDate = () => {
     try {
@@ -116,15 +112,6 @@ export const InterviewPin = ({
       setIsDeleting(false);
       setShowDeleteConfirm(false);
     }
-  };
-
-  // Fix event handler types to match expected signature
-  const handleActivate = () => {
-    setIsActive(true);
-  };
-
-  const handleDeactivate = () => {
-    setIsActive(false);
   };
 
   return (
@@ -230,30 +217,6 @@ export const InterviewPin = ({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-
-      {isActive ? 
-        <Input
-          type="password"
-          value={value}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
-          className="w-full max-w-[250px] text-center"
-          autoFocus
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              handleDeactivate();
-            }
-          }}
-        />
-      : 
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          onClick={handleActivate}
-          className="cursor-pointer"
-        >
-          ●●●●●●●●
-        </Button>
-      }
     </>
   );
 };
